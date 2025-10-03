@@ -84,6 +84,7 @@
 // Mengubah dari <script> export default setup() menjadi <script setup>
 import axios from 'axios'
 import { ref, onMounted } from 'vue'
+const apiUrl = import.meta.env.VITE_API_URL
 
 const tasks = ref([])
 const newTask = ref('')
@@ -94,7 +95,7 @@ const fetchTasks = async () => {
   const token = localStorage.getItem('token')
   // Menambahkan penanganan error dasar
   try {
-    const res = await axios.get('http://localhost:3000/tasks', {
+    const res = await axios.get(`${apiUrl}/tasks`, {
       headers: { Authorization: `Bearer ${token}` },
     })
     tasks.value = res.data.data
@@ -109,7 +110,7 @@ const addTask = async () => {
   const token = localStorage.getItem('token')
   try {
     const res = await axios.post(
-      'http://localhost:3000/tasks',
+      `${apiUrl}/tasks`,
       { title: newTask.value.trim() },
       {
         headers: { Authorization: `Bearer ${token}` },
@@ -126,7 +127,7 @@ const toggleTask = async (task) => {
   const token = localStorage.getItem('token')
   try {
     const res = await axios.put(
-      `http://localhost:3000/tasks/${task.id}`,
+      `${apiUrl}/tasks/${task.id}`,
       { completed: !task.completed },
       {
         headers: { Authorization: `Bearer ${token}` },
@@ -142,7 +143,7 @@ const toggleTask = async (task) => {
 const deleteTask = async (id) => {
   const token = localStorage.getItem('token')
   try {
-    await axios.delete(`http://localhost:3000/tasks/${id}`, {
+    await axios.delete(`${apiUrl}/tasks/${id}`, {
       headers: { Authorization: `Bearer ${token}` },
     })
     // Filter task secara lokal
